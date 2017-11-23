@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #wrap{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 50px;
+            height:50px ;
+
+            /*background: green;*/
+
+        }
+        #home{
+            position: absolute;
+            width: 50px;
+            height:50px ;
+            
+            background-image: url("img/home.png");
+            background-repeat: no-repeat;
+
+            z-index: 20;
+
+            border-radius: 50%;
+
+            transition: 2s;
+        }
+        #list{
+            position: relative;
+            top:4px;
+            left: 4px;
+            width: 42px;
+            height: 42px;
+
+        }
+        #list img{
+            position: absolute;
+            top:0;
+            left: 0;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="home"></div>
+        <div id="list">
+            <img src="img/clos.png" alt="">
+            <img src="img/full.png" alt="">
+            <img src="img/open.png" alt="">
+            <img src="img/prev.png" alt="">
+            <img src="img/refresh.png" alt="">
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var home = document.getElementById('home');
+    var imgNodes = document.querySelectorAll('#list img');
+
+    //定义元素跑的长度
+    var c  = 200;
+    
+
+    var flag = true;
+    home.onclick = function () {
+        if(flag){
+            //home 逆时针旋转
+            home.style.transform = 'rotate(-360deg)';
+
+            //每一张图片出来
+            for (var i = 0;i<imgNodes.length;i++){
+                imgNodes[i].style.top = -getPonit(c,(90/(imgNodes.length-1))*i).topY + 'px';
+                imgNodes[i].style.left = -getPonit(c,(90/(imgNodes.length-1))*i).leftX + 'px';
+
+                imgNodes[i].style.transition = '0.5s '+ (0.1*i) +'s';
+                imgNodes[i].style.transform = 'rotate(-720deg) scale(1)';
+            };
+
+        }else {
+            //home 顺时针旋转
+            home.style.transform = 'rotate(0deg)';
+            for (var i = 0;i<imgNodes.length;i++){
+                imgNodes[i].style.top = 0;
+                imgNodes[i].style.left = 0;
+
+                imgNodes[i].style.transition = '0.5s '+ (0.1*(imgNodes.length-1-i)) +'s';
+                imgNodes[i].style.transform = 'rotate(0deg) scale(1)';
+            };
+
+        };
+
+        flag = !flag;
+
+    };
+
+    //图片每一个点的位置
+    function getPonit(c,deg) {
+        //弧度 = 角度 * PI / 180；
+        var left = c * Math.sin(deg*Math.PI/180);
+
+        var top = c * Math.cos(deg*Math.PI/180);
+
+        return {leftX : left,topY:top};
+    };
+
+
+    //图片点击
+    //给每一个图片绑定点击事件
+    for (var i = 0; i < imgNodes.length; i++) {
+        imgNodes[i].onclick = function () {
+
+            this.style.transform = 'rotate(-720deg) scale(2)';
+            //标记元素透明度 opacity  ，范围 0-1
+            this.style.opacity = '0.3';
+            this.style.transition = '2s';
+
+            //检测过渡结束transitionEnd
+            //两点注意： 第一点：transitionEnd兼容问题
+            //          第二点：解绑问题---移动端性能问题
+            this.addEventListener('transitionEnd',fun);
+            this.addEventListener('webkitTransitionEnd',fun);
+
+            function fun() {
+                //图片恢复之前状态
+                this.style.transform = 'rotate(-720deg) scale(1)';
+                this.style.opacity = '1';
+                this.style.transition = '0.5s';
+
+                //解绑
+                this.removeEventListener('transitionEnd',fun);
+                this.removeEventListener('webkitTransitionEnd',fun);
+            };
+
+        };
+
+    };
+
+
+
+
+
+
+
+</script>
+</html>

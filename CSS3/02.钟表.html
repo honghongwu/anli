@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #wrap{
+            position: relative;
+            margin: 100px auto;
+            width: 300px;
+            height: 300px;
+            background: #F0F0F0;
+        }
+        #sec{
+            position: absolute;
+            top:50px;
+            left: 149px;
+            width: 2px;
+            height: 100px;
+            background: deeppink;
+
+            transform-origin: 1px 100px;
+        }
+        #min{
+            position: absolute;
+            top:70px;
+            left: 148px;
+            width: 4px;
+            height: 80px;
+            background: #000;
+
+            transform-origin: 2px 80px;
+        }
+        #hour{
+            position: absolute;
+            top:90px;
+            left: 147px;
+            width: 6px;
+            height: 60px;
+            background: #000;
+
+            transform-origin: 3px 60px;
+        }
+        #icon{
+            position: absolute;
+            top:140px;
+            left: 140px;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+
+        }
+        #list{
+            position: relative;
+            top:0;
+            left: 149px;
+            list-style: none;
+            width: 300px;
+            height: 300px;
+        }
+        #list li{
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 2px;
+            height: 8px;
+            background: #000;
+
+            transform-origin: 1px 150px;
+        }
+        #list li:nth-child(5n+1){
+            width: 4px;
+            height: 12px;
+
+            transform-origin: 2px 150px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <!--钟表-->
+        <ul id="list">
+            <!--<li></li>-->
+        </ul>
+        
+        <div id="hour"></div>
+        <div id="min"></div>
+        <div id="sec"></div>
+        <div id="icon"></div>
+    </div>
+</body>
+<script type="text/javascript">
+    var list = document.getElementById('list');
+
+    for (var i = 0; i < 60; i++) {
+        var li = document.createElement('li');
+        //6*i
+        li.style.transform = 'rotate('+ (6*i) +'deg)';
+        list.appendChild(li);
+    };
+
+    //动起来
+    //获取元素
+    var hourDom = document.getElementById('hour');
+    var minDom = document.getElementById('min');
+    var secDom = document.getElementById('sec');
+
+    setInterval(function () {
+        //获取当前时间
+        var date = new Date();
+
+        //秒
+        var sec = date.getSeconds();
+        var min = date.getMinutes();
+        min = min + sec/60;
+        var hour = date.getHours();
+        hour = hour + min/60;
+
+
+        secDom.style.transform = 'rotate(' + (6*sec) + 'deg)';
+        minDom.style.transform = 'rotate(' + (6*min) + 'deg)';
+        hourDom.style.transform = 'rotate(' + (30*hour) + 'deg)';
+    },1000);
+
+</script>
+
+</html>
